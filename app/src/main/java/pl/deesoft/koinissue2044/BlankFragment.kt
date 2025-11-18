@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.scope.fragmentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.scope.Scope
 import pl.deesoft.koinissue2044.di.linkToParentActivityScope
 import pl.deesoft.koinissue2044.ui.MainViewModel
@@ -35,6 +35,8 @@ class BlankFragment : Fragment(), AndroidScopeComponent {
     private val _scope by fragmentScope(useParentActivityScope = false)
 
     override val scope: Scope get() = linkToParentActivityScope(_scope)
+
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +51,9 @@ class BlankFragment : Fragment(), AndroidScopeComponent {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        WelcomeContent()
+                        WelcomeContent(
+                            viewModel = viewModel
+                        )
                     }
                 }
             }
@@ -60,7 +64,7 @@ class BlankFragment : Fragment(), AndroidScopeComponent {
 @Composable
 fun WelcomeContent(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel
 ) {
     val greetingText by viewModel.greetingText.collectAsState()
 
