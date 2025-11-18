@@ -1,6 +1,8 @@
 package pl.deesoft.koinissue2044
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.core.scope.Scope
@@ -19,5 +21,10 @@ class MainActivity : AppCompatActivity(), AndroidScopeComponent, ContainerScope 
             .replace(R.id.fragment_container_1, BlankFragment())
             .replace(R.id.fragment_container_2, SecondFragment())
             .commit()
+
+        // Setup button to open second activity
+        findViewById<Button>(R.id.open_second_activity_button).setOnClickListener {
+            startActivity(Intent(this, SecondActivity::class.java))
+        }
     }
 }
