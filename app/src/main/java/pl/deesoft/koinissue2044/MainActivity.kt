@@ -1,47 +1,30 @@
 package pl.deesoft.koinissue2044
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import pl.deesoft.koinissue2044.ui.theme.KoinIssue2044Theme
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.core.scope.Scope
+import pl.deesoft.koinissue2044.di.retainedScope
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(), AndroidScopeComponent, ContainerScope {
+
+    override val scope: Scope by retainedScope(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            KoinIssue2044Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        // Add both fragments to demonstrate shared use case instance
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_1, BlankFragment())
+            .replace(R.id.fragment_container_2, SecondFragment())
+            .commit()
+
+        // Setup button to open second activity
+        findViewById<Button>(R.id.open_second_activity_button).setOnClickListener {
+            startActivity(Intent(this, SecondActivity::class.java))
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    KoinIssue2044Theme {
-        Greeting("Android")
     }
 }
