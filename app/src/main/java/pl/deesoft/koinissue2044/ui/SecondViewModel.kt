@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pl.deesoft.koinissue2044.domain.GetGreetingUseCase
 
-class MainViewModel(
+class SecondViewModel(
     private val getGreetingUseCase: GetGreetingUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {

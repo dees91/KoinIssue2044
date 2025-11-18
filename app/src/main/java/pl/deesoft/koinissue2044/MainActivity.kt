@@ -13,8 +13,11 @@ class MainActivity : AppCompatActivity(), AndroidScopeComponent, ContainerScope 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Add both fragments to demonstrate shared use case instance
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main, BlankFragment())
+            .replace(R.id.fragment_container_1, BlankFragment())
+            .replace(R.id.fragment_container_2, SecondFragment())
             .commit()
     }
 }

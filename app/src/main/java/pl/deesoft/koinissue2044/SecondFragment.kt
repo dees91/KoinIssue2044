@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,21 +23,20 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.delay
 import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.scope.fragmentScope
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.scope.Scope
 import pl.deesoft.koinissue2044.di.linkToParentActivityScope
-import pl.deesoft.koinissue2044.ui.MainViewModel
+import pl.deesoft.koinissue2044.ui.SecondViewModel
 import pl.deesoft.koinissue2044.ui.theme.KoinIssue2044Theme
 
-class BlankFragment : Fragment(), AndroidScopeComponent {
+class SecondFragment : Fragment(), AndroidScopeComponent {
 
     private val _scope by fragmentScope(useParentActivityScope = false)
 
     override val scope: Scope get() = linkToParentActivityScope(_scope)
-
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,9 +51,7 @@ class BlankFragment : Fragment(), AndroidScopeComponent {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        WelcomeContent(
-                            viewModel = viewModel
-                        )
+                        DisplayContent()
                     }
                 }
             }
@@ -62,17 +60,17 @@ class BlankFragment : Fragment(), AndroidScopeComponent {
 }
 
 @Composable
-fun WelcomeContent(
+fun DisplayContent(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel
+    viewModel: SecondViewModel = koinViewModel()
 ) {
     val greetingText by viewModel.greetingText.collectAsState()
     val sharedCallCount by viewModel.sharedCallCount.collectAsState()
 
     // Periodically refresh the shared call count to see updates from other fragments
-    androidx.compose.runtime.LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         while (true) {
-            kotlinx.coroutines.delay(1000)
+            delay(1000)
             viewModel.refreshCallCount()
         }
     }
@@ -83,7 +81,7 @@ fun WelcomeContent(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Fragment 1",
+            text = "Fragment 2",
             fontSize = 18.sp,
             modifier = Modifier.padding(8.dp)
         )
@@ -102,7 +100,7 @@ fun WelcomeContent(
         )
 
         Button(
-            onClick = { viewModel.updateGreeting("First Fragment User") },
+            onClick = { viewModel.updateGreeting("Second Fragment User") },
             modifier = Modifier.padding(16.dp)
         ) {
             Text("Call UseCase")

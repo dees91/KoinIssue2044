@@ -6,6 +6,7 @@ import org.koin.dsl.module
 import pl.deesoft.koinissue2044.ContainerScope
 import pl.deesoft.koinissue2044.domain.GetGreetingUseCase
 import pl.deesoft.koinissue2044.ui.MainViewModel
+import pl.deesoft.koinissue2044.ui.SecondViewModel
 
 val appModule = module {
 
@@ -14,6 +15,7 @@ val appModule = module {
     scope<ContainerScope> {
 
         viewModelOf(::MainViewModel)
+        viewModelOf(::SecondViewModel)
 
     }
 }
